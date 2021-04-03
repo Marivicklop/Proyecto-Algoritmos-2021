@@ -5,6 +5,14 @@ class Jugador:
     self.password = password
     self.age = age
     self.avatar = avatar
-    self.clues = clues
     self.inventario = []
 
+#   def show_jugador(self):
+#     print(f'''
+# Nombre: {self.name}
+# Edad: {self.age}
+# Avatar: {self.avatar}
+# Inventario: {self.inventario}
+# ''')
+  
+  

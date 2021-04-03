@@ -23,7 +23,7 @@ class Adivinanzas(Juegos):
             print('mal')
 
 
-adivinanza = Adivinanzas(place = 0, interaction = 2)
+# adivinanza = Adivinanzas(place = 0, interaction = 2)
 
-user_answer = input('--> ')
-adivinanza.respuesta(user_answer)
+# user_answer = input('--> ')
+# adivinanza.respuesta(user_answer)

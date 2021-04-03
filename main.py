@@ -1,9 +1,11 @@
 import requests
 import random
+import enquiries
 from Juegos import Juegos
 from Adivinanzas import Adivinanzas
+from Jugador import Jugador
 
-# api = requests.get("https://api-escapamet.vercel.app")
+api = requests.get("https://api-escapamet.vercel.app")
 
 def mensajes(n):
   if n == 1:
@@ -18,7 +20,14 @@ def mensajes(n):
 ''')
 
 def validacion_password():
-  password = input('Ingrese su contraseña(Debe contener al menos una letra minúsculas, mayúsculas, números y al menos 1 carácter no alfanumérico): ')
+  password = input('''
+ _________________________________________________________________________________________________________________________________
+|                                                                                                                                 |
+|  Ingrese su contraseña(Debe contener al menos una letra minúsculas, mayúsculas, números y al menos 1 carácter no alfanumérico)  |
+|_________________________________________________________________________________________________________________________________|
+
+  -->''')
+
 
   while True:
 
@@ -46,37 +55,104 @@ def validacion_password():
             special = True
 
     if len(password) < 8 or not minusc or not num or not mayusc or not special or space:
-        password = input('Contrasena incorrecta, inténtelo de nuevo: ')
+      mensajes(1)
+      password = input('''
+ ______________________________________________ 
+|                                              |
+|  Contrasena incorrecta, inténtelo de nuevo   |
+|______________________________________________|
+
+-->''')
+
 
     else:
         print('¡Contrasena ingresada correctamente!')
         return password
         break
         
+def avatar_choice():
+  options = ['Scharifker', 'Eugenio Mendoza', 'Pelusa', 'Gandhi', 'Isa', 'Departamento de Física']
+  answer = enquiries.choose('---------', options)
+  print(f'Escogiste a {answer}')
+  return answer
 
-
-def datos_jugador():
-
+def name_regist():
   name = input('''
- _______________________________________________  
-|                                               |
-|Ingrese su nombre de usuario(máx 10 caracteres)|
-|_______________________________________________|
+ ___________________________________________________ 
+|                                                   |
+|  Ingrese su nombre de usuario(máx 10 caracteres)  |
+|___________________________________________________|
 
 -->''')
   while name == '' or len(name) > 10:
     mensajes(1)
     name = input('''
- ___________________________________________________________________
-|                                                                   |
-|Ingreso incorrecto. Ingrese su nombre de usuario(máx 10 caracteres)|
-|___________________________________________________________________|   
+ _______________________________________________________________________
+|                                                                       |
+|  Ingreso incorrecto. Ingrese su nombre de usuario(máx 10 caracteres)  |
+|_______________________________________________________________________|   
     
+-->''')
+  validar_usuario(name)
+
+  datos_jugador(name)
+
+
+def validar_usuario(name):
+  try:
+    with open("Jugadores_Database.txt") as dbj:
+        datos = dbj.readlines()
+        print(datos)
+        if name in datos:
+          print("\nJugador ya registrado.")
+          return main()
+        else:
+          return datos_jugador(name)
+  except FileNotFoundError:
+    print("\nTodavía no hay ningún jugador registrado.\n")
+    return name_regist()
+
+def datos_jugador(name):
+
+
+  password = validacion_password()
+
+
+  age = input('''
+ ___________________ 
+|                   |
+|  Ingrese su edad  |
+|___________________|
+
+-->''')
+  while (not age.isnumeric()):
+    mensajes(1)
+    name = input('''
+ _____________________________________
+|                                     |
+|  Ingreso inválido. Ingrese su edad  |
+|_____________________________________|
     
 -->''')
 
-  password = validacion_password()
-  print(password)
+  print('''
+ _________________________________ 
+|                                 |
+|  Ingrese el avatar que quiere   |
+|_________________________________| 
+''')
+
+  avatar = avatar_choice()
+
+
+  player = Jugador(name, password, age, avatar)
+  player.show_jugador()
+  with open("Jugadores_Database.txt","a") as dbj:
+    dbj.write(player.name)
+    dbj.write(player.password)
+    dbj.write(player.age)
+    dbj.write(player.avatar)
+  return main()
 
 
 
@@ -125,8 +201,17 @@ def main():
 
   start()
 
-  datos_jugador()
+  options = ['Registrarte', 'Entrar', 'Records', 'Salir']
+  answer = enquiries.choose('Elige qué quieres hacer:', options)
+  if answer == 'Registrarte':
+    name = name_regist()
 
+  elif answer == 'Entrar':
+    pass
+  elif answer == 'Records':
+    pass
+  else:
+    exit(0)
 
 # # # # # # # juego3
 # # # # # #   # adivinanza = Adivinanzas(place = 0, interaction = 2)
