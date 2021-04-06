@@ -2,10 +2,11 @@ import requests
 import random
 import enquiries
 from Juegos import Juegos
-from Adivinanzas import Adivinanzas
 from Jugador import Jugador
+from Lugares import *
+import json
 
-api = requests.get("https://api-escapamet.vercel.app")
+# api = requests.get("https://api-escapamet.vercel.app")
 
 def mensajes(n):
   if n == 1:
@@ -70,11 +71,7 @@ def validacion_password():
         return password
         break
         
-def avatar_choice():
-  options = ['Scharifker', 'Eugenio Mendoza', 'Pelusa', 'Gandhi', 'Isa', 'Departamento de Física']
-  answer = enquiries.choose('---------', options)
-  print(f'Escogiste a {answer}')
-  return answer
+
 
 def name_regist():
   name = input('''
@@ -93,28 +90,34 @@ def name_regist():
 |_______________________________________________________________________|   
     
 -->''')
-  validar_usuario(name)
 
-  datos_jugador(name)
-
-
-def validar_usuario(name):
-  try:
-    with open("Jugadores_Database.txt") as dbj:
-        datos = dbj.readlines()
-        print(datos)
-        if name in datos:
-          print("\nJugador ya registrado.")
-          return main()
-        else:
-          return datos_jugador(name)
-  except FileNotFoundError:
-    print("\nTodavía no hay ningún jugador registrado.\n")
-    return name_regist()
-
-def datos_jugador(name):
+  return name
+  
 
 
+
+
+# def validar_usuario(name):
+#   try:
+#     with open("Jugadores_Database.txt") as file:
+#       user_database = json.loads(file.readlines())
+#       print(user_database)
+#       print('\n\npapapapapa')
+#       # if name in user_database['User']:
+#       #   print('\n\npapapapapa')
+#       #   print("\nJugador ya registrado.")
+#       #   return main()
+#       # else:
+#       #   print('a')
+#   except FileNotFoundError:
+#     print('\n\npapapapapa')
+#     print("\nTodavía no hay ningún jugador registrado.\n")
+#     return datos_jugador()
+
+def datos_jugador():
+
+  name = name_regist()
+  # validar_usuario(name)
   password = validacion_password()
 
 
@@ -142,19 +145,18 @@ def datos_jugador(name):
 |_________________________________| 
 ''')
 
-  avatar = avatar_choice()
-
-
-  player = Jugador(name, password, age, avatar)
+  
+  
+  player = Jugador(name, password, age)
+  player.avatar_choice()
   player.show_jugador()
-  with open("Jugadores_Database.txt","a") as dbj:
-    dbj.write(player.name)
-    dbj.write(player.password)
-    dbj.write(player.age)
-    dbj.write(player.avatar)
-  return main()
 
 
+  jugadores_database = {'User': name,'Password': password, 'Age': age}
+  with open("Jugadores_Database.txt","a") as file:
+    file.write(json.dumps(jugadores_database))  
+
+  return player
 
 def start():
   input('''       °      °           °            °     °        °               ° 
@@ -193,9 +195,150 @@ def start():
  °
 ''')
 
+def decisiones():
+  options = ['Ir a otra sala', 'Quedarme']
+  answer = enquiries.choose('Elige qué quieres hacer:', options)
+  if answer == 'Ir a otra sala':
+    return True
+  elif answer == 'Quedarme':
+    return False
+
+def comienzo(player):
+  sala = 1
+  lugares = Lugares(sala)
+  lugares.show_sala()
+  decision = decisiones()
+  if decision == True:
+    numero_salas(sala, player)
 
 
+  else:
+    interaction = movimientos(player)
+    lugares.movimiento(interaction, player)
+    return comienzo(player)
 
+def lab01(player):
+  sala = 0
+  lugares = Lugares(sala)
+  lugares.show_sala()
+  decision = decisiones()
+  if decision == True:
+    numero_salas(sala, player)
+
+
+  else:
+    interaction = movimientos(player)
+    lugares.movimiento(interaction, player)
+    return lab01(player)
+
+def saman(player):
+  sala = 2
+  lugares = Lugares(sala)
+  lugares.show_sala()
+  decision = decisiones()
+  if decision == True:
+    numero_salas(sala, player)
+
+
+  else:
+    interaction = movimientos(player)
+    lugares.movimiento(interaction, player)
+    return saman(player)
+
+  
+def laboratorios(player):
+  sala = 3
+  lugares = Lugares(sala)
+  lugares.show_sala()
+  decision = decisiones()
+  if decision == True:
+    numero_salas(sala, player)
+  else:
+    options = ['Sí', 'No']
+    answer = enquiries.choose('Estás list@ para jugar:', options)
+    if answer == 'No':
+      numero_salas(sala, player)
+    else:
+      interaction = 0
+      lugares.movimiento(interaction, player)
+      return laboratorios(player)
+
+
+    
+
+def centro_de_servidores(player):
+  sala = 4
+  lugares = Lugares(sala)
+  lugares.show_sala()
+  decision = decisiones()
+  if decision == True:
+    numero_salas(sala, player)
+
+
+  else:
+    interaction = movimientos(player)
+    lugares.movimiento(interaction, player)
+    return centro_de_servidores(player)
+
+
+def numero_salas(sala, player):
+  if sala == 0: #Laboratorio Sl001
+    options = ['Centro de servidores', 'Laboratorios']
+    answer = enquiries.choose('¿A dónde quieres ir?', options)
+    if answer == 'Centro de servidores':
+      return centro_de_servidores(player)
+    else: 
+      return laboratorios(player)
+
+  elif sala == 1: #Biblioteca
+    options = ['Samán', 'Laboratorios']
+    answer = enquiries.choose('¿A dónde quieres ir?', options) 
+    if answer == 'Samán':
+      return saman(player)
+    else: 
+      return laboratorios(player)
+
+  elif sala == 2: #saman
+    options = ['Biblioteca, ups solo puedes ir a la biblioteca desde el samán']
+    answer = enquiries.choose('¿A dónde quieres ir?', options)
+    if answer == 'Biblioteca, ups solo puedes ir a la biblioteca desde el samán':
+      return comienzo(player)
+
+  elif sala == 3: #pasillo
+    options = ['Laboratorio SL001', 'Biblioteca']
+    answer = enquiries.choose('¿A dónde quieres ir?', options)  
+    if answer == 'Laboratorio SL001':
+      return lab01(player)
+    else: 
+      return comienzo(player)
+  
+  elif sala == 4: #cuarto de servidores
+    options = ['Laboratorio SL001, ups solo puedes ir al Laboratorio desde el cuarto de servidores']
+    answer = enquiries.choose('¿A dónde quieres ir?', options) 
+    if answer == 'Laboratorio SL001, ups solo puedes ir al Laboratorio desde el cuarto de servidores':
+      return lab01(player)
+
+
+def movimientos(player):
+  options = ['Centro', 'Izquierda', 'Derecha']
+  answer = enquiries.choose('¿Con qué objeto deseas interactuar?', options)
+  if answer == 'Centro':
+    interaction = 0
+    return interaction
+  elif answer == 'Izquierda':
+    interaction = 1
+    return interaction
+  else:
+    interaction = 2
+    return interaction
+
+
+def empezar_juego(player, life):
+  while True:
+    comienzo(player)
+
+
+    
 def main():
 
 
@@ -204,10 +347,20 @@ def main():
   options = ['Registrarte', 'Entrar', 'Records', 'Salir']
   answer = enquiries.choose('Elige qué quieres hacer:', options)
   if answer == 'Registrarte':
-    name = name_regist()
-
+    player = datos_jugador()
+    life = player.dificultad()
+    player.show_clues_life()
+    empezar_juego(player, life)
+    
   elif answer == 'Entrar':
-    pass
+    name = 'marib'
+    password = 'a'
+    age = '11'
+    player = Jugador(name, password, age)
+    life = player.dificultad()
+    player.show_clues_life()
+    empezar_juego(player, life)
+
   elif answer == 'Records':
     pass
   else:

@@ -10,23 +10,23 @@ class Ahorcado(Juegos):
 
     def __init__(self, place, interaction):
         super().__init__(place, interaction)
-        print((self.game).title()) 
-        print((self.rules).capitalize())
+
         words = random.choice(api.json()[place]["objects"][interaction]["game"]["questions"])
-        
         self.question = words["question"]
-        print(self.question)
-        
         self.word = (words["answer"]).lower()
-        print(self.word)
-        
         self.letters = set(self.word)
 
 
 
-    def ahorcado_validacion(self):
+    def ahorcado_validacion(self, player):
+        print((self.game).title()) 
+        print((self.rules).capitalize())
         self.user_letters = set() 
-        
+        print(self.question)
+        print(self.word)
+# aquí se evalua que una vez se haya mostrado las pistas, el input del usuario pasa por un set, el cual es necesario para tener
+# un registro de la letras que el usuario va metiendo. estas a su vez se borran del set, y todo esto dentro de un while loop que verifique que hasta 
+# que el len de la lista sea 0, se seguirán pidiendo inputs al usuario         
 
         while len(self.letters) > 0:
 
@@ -46,10 +46,11 @@ class Ahorcado(Juegos):
                 
                 if user_input in self.user_letters:
                     print('Ya utilizaste esa letra')
-                else:
-                    print('mal')
 
-            
+                else:
+                    print('Incorrecto')
+
+        player.show_inventario(self.award)
 
 
         
@@ -59,8 +60,8 @@ class Ahorcado(Juegos):
 
 
 
-ahorcado = Ahorcado(place = 1 , interaction = 0 )
+# ahorcado = Ahorcado(place = 1 , interaction = 0 )
 
 
 
-ahorcado.ahorcado_validacion()
+# ahorcado.ahorcado_validacion()
