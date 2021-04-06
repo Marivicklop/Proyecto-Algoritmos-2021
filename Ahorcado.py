@@ -27,17 +27,12 @@ class Ahorcado(Juegos):
 # aquí se evalua que una vez se haya mostrado las pistas, el input del usuario pasa por un set, el cual es necesario para tener
 # un registro de la letras que el usuario va metiendo. estas a su vez se borran del set, y todo esto dentro de un while loop que verifique que hasta 
 # que el len de la lista sea 0, se seguirán pidiendo inputs al usuario         
-        user_input = (input("-->")).lower()
-        
-        
-        while not user_input.isalpha():
-            user_input = (input('Estás buscando romperme el código, son las 2:30 am, no busques romper mi sanidad tambien \n--> ')).lower()
-        
-        
+
         while len(self.letters) > 0:
 
-            
-
+            user_input = (input("-->")).lower()
+            while not user_input.isalpha():
+              user_input = (input("-->")).lower()
             if user_input in self.letters:
 
 
@@ -52,12 +47,9 @@ class Ahorcado(Juegos):
                 
                 if user_input in self.user_letters:
                     print('Ya utilizaste esa letra')
-                    
 
                 else:
                     print('Incorrecto')
-                    player.quitar_vidas(n=0.25)
-
 
         player.show_inventario(self.award)
 
