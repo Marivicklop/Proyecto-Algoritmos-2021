@@ -25,10 +25,11 @@ class Mezclados(Juegos):
             new_word = random.shuffle(word)
             print("".join(word))
 
-        while new_world != user_input:
+        while new_word != user_input:
             n = 1
             player.quitar_vidas(n)
             print('Incorrecto')
+            user_answer = input('-->').lower()
             
         print('Correcto')
         player.show_inventario(self.award)

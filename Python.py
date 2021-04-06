@@ -72,6 +72,6 @@ class Python(Juegos):
                 print('Incorrecto')
                 player.quitar_vidas(n = 0.5)
                 player.get_clues(game_clues)
-
+                answer = input('Ingresa tu código: \n-->')
             print('¡Correcto!')
             player.show_inventario(self.award)

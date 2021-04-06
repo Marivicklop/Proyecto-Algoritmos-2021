@@ -337,14 +337,19 @@ def empezar_juego(player, life):
   while True:
     comienzo(player)
 
-
+def instrucciones_narrativa():
+  print('''Primera Narrativa: Hoy 5 de marzo de 2021, la Universidad sigue en cuarentena (esto no es novedad), lo que sí es novedad es 
+  que se robaron un Disco Duro de la Universidad del cuarto de redes que tiene toda la información de SAP de estudiantes, pagos y  asignaturas. 
+  Necesitamos que nos ayudes a recuperar el disco, para eso tienes {tiempo_según_dificultad} minutos, antes de que el servidor se caiga y no se 
+  pueda hacer más nada. ¿Aceptas el reto? Dale a enter para volver al menú
+''')
     
 def main():
 
 
   start()
 
-  options = ['Registrarte', 'Entrar', 'Records', 'Salir']
+  options = ['Registrarte', 'Entrar', 'Instrucciones y Narrativa', 'Salir']
   answer = enquiries.choose('Elige qué quieres hacer:', options)
   if answer == 'Registrarte':
     player = datos_jugador()
@@ -361,8 +366,10 @@ def main():
     player.show_clues_life()
     empezar_juego(player, life)
 
-  elif answer == 'Records':
-    pass
+  elif answer == 'Instrucciones y Narrativa':
+    instrucciones_narrativa()
+    input('-->')
+    return main()
   else:
     exit(0)
 
